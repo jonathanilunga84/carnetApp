@@ -5,3 +5,45 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin git@github.com:jonathanilunga84/carnetApp.git
 git push -u origin main
+
+
+
+
+/mon-projet-nextjs
+│── /public              # Fichiers statiques (images, favicons, etc.)
+│── /src
+│   ├── /app             # Pour le routing avec App Router (si Next.js 13+)
+│   ├── /pages           # Pour le routing avec Pages Router (si besoin)
+│   ├── /components      # Composants réutilisables
+│   ├── /layouts         # Layouts globaux (Header, Footer, Sidebar)
+│   ├── /hooks           # Hooks personnalisés
+│   ├── /lib             # Fonctions utilitaires et services (ex: API calls)
+│   ├── /context         # Gestion du contexte global avec React Context API
+│   ├── /store           # Si tu utilises Redux ou Zustand pour le state management
+│   ├── /styles          # Feuilles de styles globales et modules CSS
+│   ├── /config          # Configurations et constantes
+│   ├── /middleware      # Middleware personnalisé || Pour la gestion des accès et des redirections.
+│   ├── /utils           # Fonctions utilitaires
+│── .env                 # Variables d'environnement
+│── next.config.js       # Configuration de Next.js
+│── package.json         # Dépendances et scripts
+│── tsconfig.json        # Si tu utilises TypeScript
+
+
+/app/dashboard
+│── page.tsx        # Contenu principal de la page Dashboard
+│── layout.tsx      # Layout spécifique au Dashboard (optionnel)
+│── loading.tsx     # Chargement en cas de latence du serveur
+│── not-found.tsx   # Page 404 spécifique au Dashboard
+│── error.tsx       # Gestion des erreurs spécifiques au Dashboard
+
+====== middleware ======
+import { NextRequest, NextResponse } from "next/server";
+
+export function middleware(req: NextRequest) {
+  const isAuthenticated = true; // À remplacer par ta logique d'auth
+  if (!isAuthenticated) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+  return NextResponse.next();
+}
