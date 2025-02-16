@@ -37,6 +37,12 @@ git push -u origin main
 │── not-found.tsx   # Page 404 spécifique au Dashboard
 │── error.tsx       # Gestion des erreurs spécifiques au Dashboard
 
+lib/
+ ├── services/
+ │   ├── apiClient.ts    # Configuration globale d'Axios
+ │   ├── userService.ts  # Requêtes API pour les utilisateurs
+ │   ├── produitService.ts  # Requêtes API pour les produits
+
 ====== middleware ======
 import { NextRequest, NextResponse } from "next/server";
 

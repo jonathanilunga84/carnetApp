@@ -1,9 +1,18 @@
 'use client';
-import React, { useState } from 'react';
-import { TextInput, Button, Text } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { TextInput, Button, Text, Loader } from '@mantine/core';
+import { login } from '../../lib/services/userService';
+
+type User = {
+  statut: string;
+  donnees: string;
+};
 
 export default function Login() {
   const [formData, setFormData] = useState({});
+  const [user, setUser] = useState({}); //<User[]>
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target; // 'type' n'est pas nécessaire ici
@@ -11,8 +20,31 @@ export default function Login() {
       return { ...prev, [name]: value };
     });
   };
-  console.log(formData);
-  // const handleSubmit =
+
+  const fetchLogin = async () => {
+    const data = await login(formData);
+    if (data.error) {
+      setError(data.error);
+    } else {
+      //setUser(data);
+      if (data.data) {
+        setUser(data);
+        console.log('=== dans donner ==');
+        console.log(data);
+      } else {
+        setUser(data);
+        console.log('=== or donner ==');
+        console.log(data);
+      }
+    }
+    setLoading(false);
+  };
+  //console.log(user);
+  // <pre>{JSON.stringify(user, null, 2)}</pre>;
+  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    fetchLogin();
+  };
   return (
     <div className="bg-[rgba(209,209,209,1)] h-screen flex items-center justify-center">
       <div className="flex flex-col items-center justify-center shadow-xl h-[400px] w-[350px] px-5 rounded-xl bg-white">
@@ -22,8 +54,7 @@ export default function Login() {
             Connexion
           </Text>
         </h3>
-
-        <form action="" className="w-[100%]">
+        <form onSubmit={handleSubmit} className="w-[100%]" method="POST">
           {/* <div className="mt-10">
             <label className="block">
               <span className="block text-[20px] font-medium text-slate-700">
@@ -55,9 +86,11 @@ export default function Login() {
               value={formData.email || ''}
               onChange={handleChange}
               label="Email"
+              error={user?.email || ''}
               placeholder="Saisir votre mail"
               inputWrapperOrder={['label', 'input', 'description', 'error']}
             />
+            {/* <span>{user?.email || ''}</span> */}
           </div>
 
           <div className="mt-3">
@@ -67,9 +100,18 @@ export default function Login() {
               value={formData.password || ''}
               onChange={handleChange}
               label="Mot de passe"
+              error={user?.password || ''}
               placeholder="Saisir votre mot de passe"
               inputWrapperOrder={['label', 'input', 'description', 'error']}
             />
+            {/* <span>{user?.password || ''}</span> */}
+          </div>
+
+          {/* if Username ou mot de passe un incorrect */}
+          <div className="mt-3">
+            <span className="text-red-600 font-bold">
+              {user?.message || ''}
+            </span>
           </div>
 
           <div className="flex justify-end mt-5">
@@ -78,12 +120,16 @@ export default function Login() {
               className="bg-blue-800 py-3 px-5 rounded-md text-white font-bold hover:bg-blue-800/80"
             >
               Connexion
-            </button> */}
+            </button> {loading ?? <Loader color="blue" />} */}
             <Button
               type="submit"
               className="px-5 rounded-md text-[1.1rem]"
               variant="filled"
+              onClick={() => setLoading(true)}
             >
+              {loading && (
+                <Loader color="rgb(255,255,255)" size="sm" className="mr-2" />
+              )}
               Connexion
             </Button>
           </div>

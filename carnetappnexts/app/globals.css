@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* mantinejs */
+.mantine-TextInput-error {
+  font-size: 16px !important;
+}

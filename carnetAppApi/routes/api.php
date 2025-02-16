@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+// Route::group(['middleware' => ['auth']], function(){
+
+// });
+
+Route::prefix('contact')->group(function() {
+    Route::get('/listes', [ContactController::class, 'index']);
+
 });
+
+Route::post('loginapi', [AuthenticatedSessionController::class, 'loginApi']);
