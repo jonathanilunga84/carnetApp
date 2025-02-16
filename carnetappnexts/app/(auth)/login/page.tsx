@@ -1,7 +1,7 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { TextInput, Button, Text, Loader } from '@mantine/core';
-import { login } from '../../lib/services/userService';
+import { login, getAllsUsers } from '../../lib/services/userService';
 //import { notifications } from '@mantine/notifications';
 // import MatineNotification from '../../lib/mantineNotification';
 import { showNotification } from '../../lib/mantineNotification';
@@ -11,9 +11,20 @@ import { showNotification } from '../../lib/mantineNotification';
 //   donnees: string;
 // };
 
+interface User {
+  email: string;
+  password: string;
+  message: string;
+}
+
+interface FormData {
+  email: string;
+  password: string;
+}
+
 export default function Login() {
-  const [formData, setFormData] = useState({});
-  const [user, setUser] = useState({}); //<User[]>
+  const [formData, setFormData] = useState<Partial<FormData>>({});
+  const [user, setUser] = useState<Partial<User>>({}); //<User[]>
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +46,11 @@ export default function Login() {
         localStorage.setItem('carnetToken', data?.token);
         console.log('=== dans donner ==');
         console.log(data.token);
-        showNotification('Succès', 'Connexion a été réalisée avec succès !');
+        showNotification(
+          'Succès',
+          'Connexion a été réalisée avec succès !',
+          'cyan'
+        );
       } else {
         setUser(data);
         console.log('=== or donner ==');
@@ -44,12 +59,26 @@ export default function Login() {
     }
     setLoading(false);
   };
-  //console.log(user);
-  // <pre>{JSON.stringify(user, null, 2)}</pre>;
-  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const fetchGetAllUsers = async () => {
+    const data = await getAllsUsers();
+    if (data.error) {
+      //setError(data.error);
+      console.log('=== Error fecthGetAllUsers ==');
+      console.log(data.error);
+      console.log('=== Error End fecthGetAllUsers ==');
+    } else {
+      console.log('=== fecthGetAllUsers ==');
+      console.log(data);
+      console.log('=== End fecthGetAllUsers ==');
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     fetchLogin();
   };
+  console.log(error);
   return (
     <div className="bg-[rgba(209,209,209,1)] h-screen flex items-center justify-center">
       <div className="flex flex-col items-center justify-center shadow-xl h-[400px] w-[350px] px-5 rounded-xl bg-white">
@@ -139,6 +168,14 @@ export default function Login() {
             </Button>
           </div>
         </form>
+        <Button
+          type="button"
+          className="px-5 rounded-md text-[1.1rem]"
+          variant="filled"
+          onClick={fetchGetAllUsers}
+        >
+          Get user
+        </Button>
       </div>
     </div>
   );

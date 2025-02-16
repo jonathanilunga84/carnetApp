@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
@@ -20,13 +21,17 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 //     return $request->user();
 // });
 
-// Route::group(['middleware' => ['auth']], function(){
-
-// });
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::prefix('user')->group(function() {
+        Route::get('/listes', [UserController::class, 'index']);    
+    });
+});
 
 Route::prefix('contact')->group(function() {
     Route::get('/listes', [ContactController::class, 'index']);
 
 });
+
+
 
 Route::post('loginapi', [AuthenticatedSessionController::class, 'loginApi']);
