@@ -53,3 +53,16 @@ export function middleware(req: NextRequest) {
   }
   return NextResponse.next();
 }
+
+==== auth ====
+J'utilise react Nextjs je récupère déjà bien mon token et je le stock dans localStorage comment maintenant créer une logique  pour vérifier si le token et valide faire montrer le contenu de la page sinon rediriger la personne ver la page de login?
+---->>>>> reponse gpt
+Dans Next.js 15, la meilleure approche pour gérer l'authentification et la redirection en fonction de la validité du token est d'utiliser Middleware, useEffect, ou un HOC (Higher-Order Component). Voici comment faire :
+https://chatgpt.com/c/67b0d989-4ec8-8007-b2cc-6af07963d8fe
+
+Meilleure solution :
+
+Utiliser middleware.ts pour protéger les pages serveur.
+useEffect dans les pages dynamiques (ex: tableau de bord).
+Créer un HOC (withAuth) si plusieurs pages ont besoin de protection.
+==== End auth ====

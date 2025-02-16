@@ -2,11 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { TextInput, Button, Text, Loader } from '@mantine/core';
 import { login } from '../../lib/services/userService';
+//import { notifications } from '@mantine/notifications';
+// import MatineNotification from '../../lib/mantineNotification';
+import { showNotification } from '../../lib/mantineNotification';
 
-type User = {
-  statut: string;
-  donnees: string;
-};
+// type User = {
+//   statut: string;
+//   donnees: string;
+// };
 
 export default function Login() {
   const [formData, setFormData] = useState({});
@@ -29,8 +32,10 @@ export default function Login() {
       //setUser(data);
       if (data.data) {
         setUser(data);
+        localStorage.setItem('carnetToken', data?.token);
         console.log('=== dans donner ==');
-        console.log(data);
+        console.log(data.token);
+        showNotification('Succès', 'Connexion a été réalisée avec succès !');
       } else {
         setUser(data);
         console.log('=== or donner ==');
